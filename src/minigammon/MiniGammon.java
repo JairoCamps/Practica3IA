@@ -47,7 +47,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 	public MiniGammon (int f, int k, int[] fichasJ1, int[] fichasJ2, int[] golpeadas, int[] liberadas, boolean turno1, int tiradaDado) {
 		this.fichasJ1 = fichasJ1;
 		this.fichasJ2 = fichasJ2;
-		this.golpeadas = golpeadas;
+		this.golpeadas = golpeadas; 
 		this.liberadas = liberadas;
 		this.turno1 = turno1;
 		this.tiradaDado = tiradaDado;
