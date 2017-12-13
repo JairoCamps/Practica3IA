@@ -24,7 +24,7 @@ public class Main {
 		
 		//MiniGammon m2 = new MiniGammon (f, k, fichasJ1, fichasJ2, golpeadas, liberadas, true,  tiradaDado) ;
 		
-		MiniGammon m = new MiniGammon(5, 1, fichasJ1, fichasJ2);
+		MiniGammon m = new MiniGammon(6, 5, 1, fichasJ1, fichasJ2);
 
 		List <MiniGammon> listaHijos = m.hijos();   //probar aqui m2 si se desea
 		for (MiniGammon g : listaHijos) {

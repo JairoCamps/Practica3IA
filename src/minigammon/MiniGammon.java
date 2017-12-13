@@ -20,9 +20,10 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 	private int longitud; //aqui se guarda la longitud del tablero
 	private int f; //numero de fichas de cada jugador
 	private int k; //numero de fichas a liberar para ganar
+	private int c; //numero de caras del dado
 
 	
-	public MiniGammon (int f, int k, int[] fichasJ1, int[] fichasJ2) throws Exception {
+	public MiniGammon (int c, int f, int k, int[] fichasJ1, int[] fichasJ2) throws Exception {
 		
 		if (fichasJ1.length != fichasJ2.length) {
 			throw new Exception ("La longitud de los tableros de los jugadores debe coincidir.");
@@ -37,14 +38,15 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		this.golpeadas = new int[] {0, 0};
 		this.liberadas = new int[] {0, 0};
 		this.turno1 = true;
-		this.tiradaDado = dado.nextInt(5)+1;
+		this.c = c;
+		this.tiradaDado = dado.nextInt(c-1)+1;
 		this.longitud = fichasJ1.length;
 		this.f = f;
 		this.k = k;
 		System.out.println(this.tiradaDado);
 	}
 	
-	public MiniGammon (int f, int k, int[] fichasJ1, int[] fichasJ2, int[] golpeadas, int[] liberadas, boolean turno1, int tiradaDado) {
+	public MiniGammon (int c, int f, int k, int[] fichasJ1, int[] fichasJ2, int[] golpeadas, int[] liberadas, boolean turno1, int tiradaDado) {
 		this.fichasJ1 = fichasJ1;
 		this.fichasJ2 = fichasJ2;
 		this.golpeadas = golpeadas; 
@@ -54,12 +56,42 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		this.longitud = fichasJ1.length;
 		this.f = f;
 		this.k = k;
+		this.c = c;
 	}
+	
+	//constructor para pruebas
+	public MiniGammon(int fichasParaGanar, int carasDado) {
+		this.fichasJ1 = new int[]  {2, 0, 3, 0, 0, 0, 0, 0};
+		this.fichasJ2 = new int[] {0, 0, 0, 0, 0, 3, 0, 2};
+		this.golpeadas = new int[] {0, 0};
+		this.liberadas = new int[] {0, 0};
+		this.turno1 = true;
+		this.tiradaDado = dado.nextInt(c-1)+1;
+		this.longitud = fichasJ1.length;
+		this.f = 5;
+		this.k = fichasParaGanar;
+		this.c = carasDado;
+	}
+	
+	//el otro constructor para las pruebas
+	public MiniGammon(int[] fichasJ1, int[] fichasJ2, int[] golpeadas, int[] liberadas, boolean turno1, int tiradaDado) {
+		this.fichasJ1 = fichasJ1;
+		this.fichasJ2 = fichasJ2;
+		this.golpeadas = golpeadas;
+		this.liberadas = liberadas;
+		this.turno1 = turno1;
+		this.tiradaDado = tiradaDado;
+		this.longitud = fichasJ1.length;
+		this.f = 5;
+		this.k = 5;
+		this.c = 6;
+	}
+
 
 	@Override
 	public List<MiniGammon> hijos() {
 		// TODO Auto-generated method stub
-		int sigTirada = dado.nextInt(5)+1;
+		int sigTirada = dado.nextInt(c-1)+1;
 		List<MiniGammon> lista = new ArrayList<>();
 		
 		//Primero controlamos que sea el turno del Jugador 1
@@ -193,7 +225,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 if (this.tiradaDado + i >= this.longitud) { //A lo mejor puede liberarla directamente
 				 nuevoJ1[i]--;
 				 nuevoLiberadas[0]++;
-				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 				 lista.add(g);
 				 
 			 
@@ -208,7 +240,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 						nuevoGolpeadas[1]++;
 					}
 					
-					MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+					MiniGammon g = new MiniGammon(this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 					lista.add(g);
 					
 				}
@@ -226,7 +258,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 if (this.tiradaDado + i >= this.longitud) { //A lo mejor puede liberarla directamente
 				 nuevoJ2[i]--;
 				 nuevoLiberadas[1]++;
-				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 				 lista.add(g);
 				 
 			 
@@ -241,7 +273,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 						nuevoGolpeadas[0]++;
 					}
 					
-					MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+					MiniGammon g = new MiniGammon(this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 					lista.add(g);
 					
 				}
@@ -262,7 +294,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 if (this.tiradaDado >= this.longitud) { //A lo mejor puede liberarla directamente
 				 nuevoGolpeadas[0]--;
 				 nuevoLiberadas[0]++;
-				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 				 lista.add(g);
 				
 			 
@@ -275,7 +307,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 					nuevoJ2[this.tiradaDado - 1]--;
 					nuevoGolpeadas[1]++;
 				}
-				MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
+				MiniGammon g = new MiniGammon(this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
 						!turno1, sigTirada);
 				lista.add(g);
 				
@@ -297,7 +329,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 if (this.tiradaDado >= this.longitud) { //A lo mejor puede liberarla directamente
 				 nuevoGolpeadas[1]--;
 				 nuevoLiberadas[1]++;
-				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 				 lista.add(g);
 				
 			 
@@ -310,7 +342,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 					nuevoJ1[this.tiradaDado - 1]--;
 					nuevoGolpeadas[0]++;
 				}
-				MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
+				MiniGammon g = new MiniGammon(this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
 						!turno1, sigTirada);
 				lista.add(g);
 				
@@ -326,7 +358,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
 		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
 				
-		MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+		MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
 		lista.add(g);
 	}
 	
