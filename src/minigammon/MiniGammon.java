@@ -77,22 +77,31 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 				 }
 			 }
 			 
-			 if (lista.isEmpty()) {
-				 
-				 int[] nuevoJ1 = Arrays.copyOf(this.fichasJ1, this.fichasJ1.length);
-				 int[] nuevoJ2 = Arrays.copyOf(this.fichasJ2, this.fichasJ2.length);
-				 int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
-				 int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
-						
-				MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
-				lista.add(g);
-				 
+			 if (lista.isEmpty()) {		 
+				 anadirCopia(lista, sigTirada);		 
 			 }
 			 
 			 return lista;
 			
 		}else {
-			return null;
+			
+			if (this.golpeadas[1] > 0) {   //Si el Jugador 2 tiene fichas golpeadas debe introducirlas primero
+				 introducirJ2 (lista,  sigTirada);
+				
+			 }else { //Si el jugador 2 no tiene fichas golpeadas
+				 
+				 for (int i=0; i<this.fichasJ2.length; i++) {  //Iteramos para ver donde tiene fichas
+					 if (this.fichasJ2[i] > 0) {   //Si tiene fichas en esa casilla podemos moverlas
+						 comprobarFichaJ2 (lista,  i,  sigTirada);
+					 }
+				 }
+			 }
+			 
+			 if (lista.isEmpty()) {		 
+				 anadirCopia(lista, sigTirada);		 
+			 }
+			 
+			 return lista;
 		}
 	
 	}
@@ -207,6 +216,39 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		  }
 	}
 	
+	public void comprobarFichaJ2 (List<MiniGammon> lista, int i, int sigTirada) {
+		
+		int[] nuevoJ1 = Arrays.copyOf(this.fichasJ1, this.fichasJ1.length);
+		int[] nuevoJ2 = Arrays.copyOf(this.fichasJ2, this.fichasJ2.length);
+		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
+		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
+			 
+			 if (this.tiradaDado + i >= this.longitud) { //A lo mejor puede liberarla directamente
+				 nuevoJ2[i]--;
+				 nuevoLiberadas[1]++;
+				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 lista.add(g);
+				 
+			 
+			 }else {		//Si no puede liberar
+				 
+				 if(this.fichasJ1[this.tiradaDado+i] <= 1) {  //Si hay mas de una ficha de 2 no puede poner
+					nuevoJ2[this.tiradaDado + i]++;
+					nuevoJ2[i]--;
+					
+					if (this.fichasJ1[this.tiradaDado + i] == 1) { // Si habia 1 ficha del oponente
+						nuevoJ1[this.tiradaDado + i]--;
+						nuevoGolpeadas[0]++;
+					}
+					
+					MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+					lista.add(g);
+					
+				}
+			
+		  }
+	}
+	
 	public void introducirJ1 (List<MiniGammon> lista, int sigTirada) {
 		
 		int[] nuevoJ1 = Arrays.copyOf(this.fichasJ1, this.fichasJ1.length);
@@ -242,26 +284,51 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		
 	}
 	
+	public void introducirJ2 (List<MiniGammon> lista, int sigTirada) {
+		
+		int[] nuevoJ1 = Arrays.copyOf(this.fichasJ1, this.fichasJ1.length);
+		int[] nuevoJ2 = Arrays.copyOf(this.fichasJ2, this.fichasJ2.length);
+		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
+		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
+		
+		 if (this.fichasJ1[this.tiradaDado-1] <= 1) {     // Si hay mas de 1 ficha contraria no puede mover y debe pasar turno
+			 
+			 
+			 if (this.tiradaDado >= this.longitud) { //A lo mejor puede liberarla directamente
+				 nuevoGolpeadas[1]--;
+				 nuevoLiberadas[1]++;
+				 MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+				 lista.add(g);
+				
+			 
+			 }else {								//Si no puede liberar
+				 
+				nuevoJ2[this.tiradaDado - 1]++;
+				nuevoGolpeadas[1]--;
+				
+				if (this.fichasJ1[this.tiradaDado - 1] == 1) { // Si habia 1 ficha del oponente
+					nuevoJ1[this.tiradaDado - 1]--;
+					nuevoGolpeadas[0]++;
+				}
+				MiniGammon g = new MiniGammon(this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
+						!turno1, sigTirada);
+				lista.add(g);
+				
+			}
+		}
+		
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void anadirCopia (List <MiniGammon> lista, int sigTirada) {
+		
+		int[] nuevoJ1 = Arrays.copyOf(this.fichasJ1, this.fichasJ1.length);
+		int[] nuevoJ2 = Arrays.copyOf(this.fichasJ2, this.fichasJ2.length);
+		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
+		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
+				
+		MiniGammon g = new MiniGammon (this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
+		lista.add(g);
+	}
 	
 
 }
