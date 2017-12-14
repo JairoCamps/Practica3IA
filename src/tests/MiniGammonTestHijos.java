@@ -623,13 +623,13 @@ public class MiniGammonTestHijos {
 	/**
 	 * Inicia el generador de n�meros aleatorios y otros datos del juego
 	 */
-	@BeforeClass
+	/*@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		int carasDado = 2;
 		int fichasParaGanar = 5;
 		
 		new MiniGammon(fichasParaGanar, carasDado);
-	}
+	}*/
 	
 	@Test
 	public void testCasos1(){

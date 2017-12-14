@@ -255,7 +255,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
 		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
 			 
-			 if (this.tiradaDado + i >= this.longitud) { //A lo mejor puede liberarla directamente
+			 if (i - this.tiradaDado < 0) { //A lo mejor puede liberarla directamente
 				 nuevoJ2[i]--;
 				 nuevoLiberadas[1]++;
 				 MiniGammon g = new MiniGammon (this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas, !turno1, sigTirada);
@@ -264,12 +264,12 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 
 			 }else {		//Si no puede liberar
 				 
-				 if(this.fichasJ1[this.tiradaDado+i] <= 1) {  //Si hay mas de una ficha de 2 no puede poner
-					nuevoJ2[this.tiradaDado + i]++;
+				 if(this.fichasJ1[i-this.tiradaDado] <= 1) {  //Si hay mas de una ficha de 2 no puede poner
+					nuevoJ2[i-this.tiradaDado]++;
 					nuevoJ2[i]--;
 					
-					if (this.fichasJ1[this.tiradaDado + i] == 1) { // Si habia 1 ficha del oponente
-						nuevoJ1[this.tiradaDado + i]--;
+					if (this.fichasJ1[i-this.tiradaDado] == 1) { // Si habia 1 ficha del oponente
+						nuevoJ1[i-this.tiradaDado]--;
 						nuevoGolpeadas[0]++;
 					}
 					
@@ -323,7 +323,7 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 		int[] nuevoGolpeadas = Arrays.copyOf(this.golpeadas, this.golpeadas.length);
 		int[] nuevoLiberadas = Arrays.copyOf(this.liberadas, this.liberadas.length); 
 		
-		 if (this.fichasJ1[this.tiradaDado-1] <= 1) {     // Si hay mas de 1 ficha contraria no puede mover y debe pasar turno
+		 if (this.fichasJ1[this.longitud - this.tiradaDado] <= 1) {     // Si hay mas de 1 ficha contraria no puede mover y debe pasar turno
 			 
 			 
 			 if (this.tiradaDado >= this.longitud) { //A lo mejor puede liberarla directamente
@@ -335,11 +335,11 @@ public class MiniGammon extends EstadoJuego<MiniGammon> {
 			 
 			 }else {								//Si no puede liberar
 				 
-				nuevoJ2[this.tiradaDado - 1]++;
+				nuevoJ2[this.longitud - this.tiradaDado]++;
 				nuevoGolpeadas[1]--;
 				
-				if (this.fichasJ1[this.tiradaDado - 1] == 1) { // Si habia 1 ficha del oponente
-					nuevoJ1[this.tiradaDado - 1]--;
+				if (this.fichasJ1[this.longitud - this.tiradaDado] == 1) { // Si habia 1 ficha del oponente
+					nuevoJ1[this.longitud - this.tiradaDado]--;
 					nuevoGolpeadas[0]++;
 				}
 				MiniGammon g = new MiniGammon(this.c, this.f, this.k, nuevoJ1, nuevoJ2, nuevoGolpeadas, nuevoLiberadas,
